@@ -8,11 +8,11 @@ class Patient
   private boolean remission;
   private double remDuration;
   private double monthsToLive; 
-  HashMap<String, Float> data = new HashMap<String, Float>();
+  HashMap<String, Double> data = new HashMap<String, Double>();
   
   
   // Constructor that takes all Patient attributes as input
-  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Float> data){
+  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
     this.patientId = patientId;
     this.remission = remission;
     this.remDuration = remDuration;
@@ -65,6 +65,7 @@ public class Solution
     {
       System.out.println(patientList.get(i).getPatientId());
     }
+    
     
   }
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
@@ -135,7 +136,7 @@ public class Solution
             parts[i] = "8008135"; //arbitrary number to avoid NullPointer error - will be dealt with later
           }
         }
-        HashMap<String, Float> aData = new HashMap<String, Float>();
+        HashMap<String, Double> aData = new HashMap<String, Double>();
         String aID;
         boolean aRemission;
         double aDuration;
@@ -162,11 +163,11 @@ public class Solution
          // System.out.println(parts[i]);
           if(parts[i].equals("na"))
           {
-            Float value = Float.parseFloat("8008135");
+            Double value = Double.parseDouble("8008135");
           }
           else
           {
-          Float value = Float.parseFloat(parts[i]);
+          Double value = Double.parseDouble(parts[i]);
           
 //          System.out.println(value);
           aData.put(keys[counter2], value);
