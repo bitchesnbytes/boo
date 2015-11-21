@@ -60,41 +60,53 @@ public class Solution
     {
       BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
       String currentLine = reader.readLine();
+      currentLine = currentLine.toLowerCase();
       currentLine = reader.readLine();
-      String after = currentLine.trim().replaceAll(" +", ",");
-      String [] parts = after.split(",");
-        //31
-      String [] arr = new String [265];
-      int counter =0;
-      for (int i = 31; i<=296; i++)
+      String [] parts = currentLine.split("\t");
+      String [] keys = new String [266];
+      int counter = 0;
+      for (int i = 1; i < 266; i++)
       {
-        arr[counter] = parts[i];
+       // System.out.println(parts[i]);
+        keys[counter] = parts[i];
         counter++;
-      }
-      for(int i = 297; i<parts.length; i++)
+      }  
+      currentLine = reader.readLine();
+      currentLine = currentLine.toLowerCase();
+      parts = currentLine.split("\t");
+      while(currentLine!= null)
       {
-       Patient newPatient = new Patient(aRemission, aDuration, aMonths, aData, aName);
-       int key = (i+30)%269;
-       if(key==0)
-       { newPatient.aName = parts[i];}
-       if(key==266)
-       {  newPatient.aRemission = parts[i];}
-       if(key==267)
-       {  newPatient.aDuration = Integer.parseInt(parts[i]);}
-       if(key==268)
-       {  
-         newPatient.aMonths = Integer.parseInt(parts[i]);
-         patient.add(newPatient);
-       }
-       else
-       {
-         float value = Float.parseFloat(parts[i]);
-         newPatient.aData.put(key, value);
-        } 
-      } 
-    reader.close();
+        HashMap<String, Float> aData = new HashMap<String, Float>();
+        String aID;
+        boolean aRemission;
+        double aDuration;
+        double aMonths;
+        aID = parts[0];
+        if(parts[266].equals("COMPLETE_REMISSION"))
+         {
+           aRemission = true;
+         }
+         else
+         {
+           aRemission = false;
+         }
+         aDuration =Double.parseDouble(parts[267]);
+         aMonths = Double.parseDouble(parts[268]);
+         int counter2 = 0;
+        for (int i=1; i<266; i++)
+        {
+          Float value = Float.parseFloat(parts[i]);
+          aData.put(keys[counter2], value);
+        }
+        Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData);
+        patient.add(newPatient);
+        currentLine = reader.readLine();
+        currentLine = currentLine.toLowerCase();
+        parts = currentLine.split("\t");
+      }
+      reader.close();
     }
-  catch (IOException x)
+      catch (IOException x)
   {
     System.out.println(x);
   }
