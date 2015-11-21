@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
   
   
-  // Constructor that takes all Patient attributes as input
+  // Class containing patient data
 static class Patient
 {
   private String patientId; 
