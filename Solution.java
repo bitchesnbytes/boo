@@ -1,20 +1,22 @@
 import java.util.*;
 import java.io.*;
-
-class Patient
+  
+  
+  // Constructor that takes all Patient attributes as input
+static class Patient
 {
   private String patientId; 
-  private boolean Remission;
-  private double RemDuration;
+  private boolean remission;
+  private double remDuration;
   private double monthsToLive; 
   HashMap<String, Float> data = new HashMap<String, Float>();
   
   
   // Constructor that takes all Patient attributes as input
-  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Float> data){
+  public Patient(String patientId, boolean remission, double remDuration, double monthsToLive, HashMap<String, Float> data){
     this.patientId = patientId;
-    this.Remission = Remission;
-    this.RemDuration = RemDuration;
+    this.remission = remission;
+    this.remDuration = remDuration;
     this.monthsToLive = monthsToLive;
     this.data = data;
   }
@@ -28,19 +30,19 @@ class Patient
   }
   
   public boolean getRemission(){
-    return this.Remission;
+    return this.remission;
   }
   
-  public void setRemission(boolean Remission){
-    this.Remission = Remission;
+  public void setRemission(boolean remission){
+    this.remission = remission;
   }
   
   public double getRemDuration(){
-    return this.RemDuration;
+    return this.remDuration;
   }
   
-  public void setRemDuration(double RemDuration){
-    this.RemDuration = RemDuration;
+  public void setRemDuration(double remDuration){
+    this.remDuration = remDuration;
   }
   
   public double getMonthsToLive(){
@@ -53,24 +55,6 @@ class Patient
   
 }
 
-public class Solution
-{
-  
-  public static void main (String[] args)
-  {
-    InputStream in;
-    if( args.length > 0 ){
-      in = new FileInputStream( args[0] );}
-    else{
-      in = System.in;}
-    ArrayList<Patient> butthole = new ArrayList<Patient>();
-    patientList = importPatientInfo("trainingData.txt");
-    for(int i = 0; i<patientList.size(); i++)
-    {
-      System.out.println(patientList.get(i).getPatientId());
-    }
-    
-  }
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
     ArrayList<Patient> patient = new ArrayList<Patient>();
@@ -81,10 +65,10 @@ public class Solution
       String currentLine = reader.readLine();
       currentLine = currentLine.toLowerCase();
       currentLine = reader.readLine();
-      String [] parts = currentLine.split("\t");
-      String [] keys = new String [266];
+      String [] parts = currentLine.split("\t"); //put elements in array seperated by tabs
+      String [] keys = new String [266];//string of the keys to hash map
       int counter = 0;
-      for (int i = 1; i < 266; i++)
+      for (int i = 1; i < 266; i++) //go through first block to get all keys into keys array 
       {
        // System.out.println(parts[i]);
         keys[counter] = parts[i];
@@ -97,9 +81,9 @@ public class Solution
 
       while(currentLine!= null)
       {
-                currentLine = currentLine.toLowerCase();
+        currentLine = currentLine.toLowerCase();
         parts = currentLine.split("\t");
-        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};
+        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};//changing all elements in hashmap that aren't numbers into a number
         
         for (int m = 0; m < nonNumIndex.length; m++)
         {
@@ -133,7 +117,7 @@ public class Solution
           
           if (parts[i].equals("na") || parts[i].equals("notdone") || parts[i].equals("nd"))
           {
-            parts[i] = "8008135";
+            parts[i] = "8008135"; //arbitrary number, shouldn't be a value this high 
           }
         }
         HashMap<String, Float> aData = new HashMap<String, Float>();
@@ -174,8 +158,8 @@ public class Solution
           }
         }
         
-        Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData);
-        patient.add(newPatient);
+        Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
+        patient.add(newPatient); 
         currentLine = reader.readLine();
 
       }
