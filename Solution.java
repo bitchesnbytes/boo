@@ -1,9 +1,8 @@
 import java.util.*;
 import java.io.*;
-  
-  
-  // Class containing patient data
-static class Patient
+
+// Class for patient data
+class Patient
 {
   private String patientId; 
   private boolean remission;
@@ -13,7 +12,7 @@ static class Patient
   
   
   // Constructor that takes all Patient attributes as input
-  public Patient(String patientId, boolean remission, double remDuration, double monthsToLive, HashMap<String, Float> data){
+  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Float> data){
     this.patientId = patientId;
     this.remission = remission;
     this.remDuration = remDuration;
@@ -33,7 +32,7 @@ static class Patient
     return this.remission;
   }
   
-  public void setRemission(boolean remission){
+  public void setRemission(boolean Remission){
     this.remission = remission;
   }
   
@@ -55,6 +54,19 @@ static class Patient
   
 }
 
+public class Solution
+{
+  
+  public static void main (String[] args) throws Exception
+  {
+    ArrayList<Patient> patientList = new ArrayList<Patient>();
+    patientList = importPatientInfo("trainingData.txt");
+    for(int i = 0; i<patientList.size(); i++)
+    {
+      System.out.println(patientList.get(i).getPatientId());
+    }
+    
+  }
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
     ArrayList<Patient> patient = new ArrayList<Patient>();
@@ -83,8 +95,11 @@ static class Patient
       {
         currentLine = currentLine.toLowerCase();
         parts = currentLine.split("\t");
-        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};//changing all elements in hashmap that aren't numbers into a number
         
+        
+        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};
+        
+        // changes all nonnumerical attributes
         for (int m = 0; m < nonNumIndex.length; m++)
         {
           
@@ -117,7 +132,7 @@ static class Patient
           
           if (parts[i].equals("na") || parts[i].equals("notdone") || parts[i].equals("nd"))
           {
-            parts[i] = "8008135"; //arbitrary number, shouldn't be a value this high 
+            parts[i] = "8008135"; //arbitrary number to avoid NullPointer error - will be dealt with later
           }
         }
         HashMap<String, Float> aData = new HashMap<String, Float>();
@@ -159,7 +174,7 @@ static class Patient
         }
         
         Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
-        patient.add(newPatient); 
+        patient.add(newPatient);
         currentLine = reader.readLine();
 
       }
@@ -173,4 +188,3 @@ static class Patient
   return patient;
  }
 }
-
