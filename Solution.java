@@ -3,25 +3,42 @@ import java.io.*;
 
 public class Patient
 {
+  private String patientId; 
   private boolean Remission;
   private double RemDuration;
   private double monthsToLive; 
   HashMap<String[], Float[]> data = new HashMap<String[], Float[]>();
   
+  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap data){
+    this.patientId = patientId;
+    this.Remission = Remission;
+    this.RemDuration = RemDuration;
+    this.monthsToLive = monthsToLive;
+    this.data = data;
+  }
+  
+  public String getPatientId(){
+    return this.patientId;
+  }
+  
+  public void setPatientId(String patientId){
+    this.patientId = patientId;
+  }
+  
   public boolean getRemission(){
     return this.Remission;
   }
   
-  public void setRemission(boolean remission){
-    this.remission = remission;
+  public void setRemission(boolean Remission){
+    this.Remission = Remission;
   }
   
   public double getRemDuration(){
-    return this.remDuration;
+    return this.RemDuration;
   }
   
-  public void setRemDuration(double remDuration){
-    this.remDuration = remDuration;
+  public void setRemDuration(double RemDuration){
+    this.RemDuration = RemDuration;
   }
   
   public double getMonthsToLive(){
