@@ -10,7 +10,7 @@ private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   ArrayList<Patient> patient = new ArrayList<Patient>();
   try
   {
-    BufferedReader reader = new BufferedReader (new FileReader(doctorFilePath));
+    BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
     String currentLine = reader.readLine();
     currentLine = reader.readLine();
     while(currentLine != null)
@@ -22,7 +22,7 @@ private static ArrayList<Patient> importPatientInfo(String patientFilePath)
       String specialty = parts[2];
       long id = Long.parseLong(parts[3]);
       //split each component by commas, and add to a new doctor object 
-      Doctor newdoc = new Doctor(firstname, lastname, specialty, id);
+      Patient newPatient = new Patient(, lastname, specialty, id);
       doc.add(newdoc);
       currentLine = reader.readLine();
     }
