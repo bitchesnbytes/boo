@@ -11,7 +11,6 @@ class Patient
   private String infection;
   HashMap<String, Double> data = new HashMap<String, Double>();
   
-  
   // Constructor that takes all Patient attributes as input
   public Patient(String patientId, String infection, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
     this.patientId = patientId;
@@ -22,44 +21,12 @@ class Patient
     this.data = data;
   }
   
-  public String getPatientId(){
-    return this.patientId;
-  }
-  
-  public void setPatientId(String patientId){
-    this.patientId = patientId;
-  }
-  
-  public boolean getRemission(){
-    return this.remission;
-  }
-  
-  public void setRemission(boolean Remission){
-    this.remission = remission;
-  }
-  
-  public double getRemDuration(){
-    return this.remDuration;
-  }
-  
-  public void setRemDuration(double remDuration){
-    this.remDuration = remDuration;
-  }
-  
-  public double getMonthsToLive(){
-    return this.monthsToLive;
-  }
-  
-  public void setMonthsToLive(double monthsToLive){
-    this.monthsToLive = monthsToLive;
-  }
-  
-  public HashMap<String, Double> getHashMap(){
-    return this.data;
-  }
-  
-  public String getInfection()
-  { return this.infection; }
+  public String getPatientId(){ return this.patientId;  }
+  public boolean getRemission(){ return this.remission; }
+  public double getRemDuration(){ return this.remDuration; }
+  public double getMonthsToLive(){ return this.monthsToLive; }
+  public HashMap<String, Double> getHashMap() { return this.data; }
+  public String getInfection() { return this.infection; }
   
 }
 
