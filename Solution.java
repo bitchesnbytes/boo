@@ -3,35 +3,13 @@ import java.io.*;
 
 public class Solution
 {
-
-}
-private static ArrayList<Patient> importPatientInfo(String patientFilePath)
-{
-  ArrayList<Patient> patient = new ArrayList<Patient>();
-  try
+  public static void main (String[] args)
   {
-    BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
-    String currentLine = reader.readLine();
-    currentLine = reader.readLine();
-    while(currentLine != null)
+    ArrayList<Patient> butthole = new ArrayList<Patient>();
+    butthole = importPatientInfo("trainingData.txt");
+    for(int i = 0; i<butthole.size(); i++)
     {
-      String[] parts = new String[4];
-      parts = currentLine.split(",");
-      String firstname = parts[0];
-      String lastname = parts[1];
-      String specialty = parts[2];
-      long id = Long.parseLong(parts[3]);
-      //split each component by commas, and add to a new doctor object 
-      Patient newPatient = new Patient(, lastname, specialty, id);
-      doc.add(newdoc);
-      currentLine = reader.readLine();
+      System.out.println(butthole.get(i).getPatientId());
     }
-    reader.close();
-    }
-  catch (IOException x)
-  {
-    System.out.println(x);
   }
-  //returns array list
-  return doc;
- }
+}
