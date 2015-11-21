@@ -51,26 +51,47 @@ public class Patient
   
 }
 
-private static ArrayList<Patient> importPatientInfo(String patientFilePath)
+public class Solution
 {
-  ArrayList<Patient> patient = new ArrayList<Patient>();
-  try
+  private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
-    BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
-    String currentLine = reader.readLine();
-    currentLine = reader.readLine();
-    while(currentLine != null)
+    ArrayList<Patient> patient = new ArrayList<Patient>();
+    try
     {
-      String[] parts = new String[4];
-      parts = currentLine.split(",");
-      String firstname = parts[0];
-      String lastname = parts[1];
-      String specialty = parts[2];
-      long id = Long.parseLong(parts[3]);
-      Patient newPatient = new Patient(aRemission, aDuration, aMonths, aCorrelation);
-      doc.add(newdoc);
+      BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
+      String currentLine = reader.readLine();
       currentLine = reader.readLine();
-    }
+      String after = currentLine.trim().replaceAll(" +", ",");
+      String [] parts = after.split(",");
+        //31
+      String [] arr = new String [265];
+      int counter =0;
+      for (int i = 31; i<=296; i++)
+      {
+        arr[counter] = parts[i];
+        counter++;
+      }
+      for(int i = 297; i<parts.length; i++)
+      {
+       Patient newPatient = new Patient(aRemission, aDuration, aMonths, aData, aName);
+       int key = (i+30)%269;
+       if(key==0)
+       { newPatient.aName = parts[i];}
+       if(key==266)
+       {  newPatient.aRemission = parts[i];}
+       if(key==267)
+       {  newPatient.aDuration = Integer.parseInt(parts[i]);}
+       if(key==268)
+       {  
+         newPatient.aMonths = Integer.parseInt(parts[i]);
+         patient.add(newPatient);
+       }
+       else
+       {
+         float value = Float.parseFloat(parts[i]);
+         newPatient.aData.put(key, value);
+        } 
+      } 
     reader.close();
     }
   catch (IOException x)
@@ -78,9 +99,6 @@ private static ArrayList<Patient> importPatientInfo(String patientFilePath)
     System.out.println(x);
   }
   //returns array list
-  return doc;
+  return patient;
  }
-public class Solution
-{
-  
 }
