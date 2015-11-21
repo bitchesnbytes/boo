@@ -224,5 +224,34 @@ public class Solution
     double sD = Math.sqrt(variance);
     return sD;
   }
+  
+  public static ArrayList<Patient> getRemissionPatients(ArrayList<Patient> patients)
+  {
+    ArrayList<Patient> remPatients = new ArrayList<Patient>();
+    
+    for (int i = 0; i < patients.size(); i++)
+    {
+      if(patients.get(i).getRemission())
+      {
+        remPatients.add(patients.get(i));
+      }
+    }
+    return remPatients;
+    
+  }
+  
+  public static ArrayList<Patient> getResistantPatients(ArrayList<Patient> patients)
+  {
+    ArrayList<Patient> resPatients = new ArrayList<Patient>();
+    
+    for (int i = 0; i < patients.size(); i++)
+    {
+      if(!(patients.get(i).getRemission()))
+      {
+        resPatients.add(patients.get(i));
+      }
+    }
+    return resPatients;
+  }
     
 }
