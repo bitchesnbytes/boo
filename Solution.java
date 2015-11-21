@@ -2,65 +2,36 @@ import java.util.*;
 import java.io.*;
 
 // Class for patient data
+// Class for patient data
 class Patient
 {
   private String patientId; 
   private boolean remission;
   private double remDuration;
-  private double monthsToLive; 
+  private double monthsToLive;
+  private String infection;
   HashMap<String, Double> data = new HashMap<String, Double>();
   
-  
   // Constructor that takes all Patient attributes as input
-  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
+  public Patient(String patientId, String infection, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
     this.patientId = patientId;
     this.remission = remission;
+    this.infection = infection;
     this.remDuration = remDuration;
     this.monthsToLive = monthsToLive;
     this.data = data;
   }
   
-  public String getPatientId(){
-    return this.patientId;
-  }
-  
-  public void setPatientId(String patientId){
-    this.patientId = patientId;
-  }
-  
-  public boolean getRemission(){
-    return this.remission;
-  }
-  
-  public void setRemission(boolean Remission){
-    this.remission = remission;
-  }
-  
-  public double getRemDuration(){
-    return this.remDuration;
-  }
-  
-  public void setRemDuration(double remDuration){
-    this.remDuration = remDuration;
-  }
-  
-  public double getMonthsToLive(){
-    return this.monthsToLive;
-  }
-  
-  public void setMonthsToLive(double monthsToLive){
-    this.monthsToLive = monthsToLive;
-  }
-  
-  public HashMap<String, Double> getHashMap(){
-    return this.data;
-  } 
+  public String getPatientId(){ return this.patientId;  }
+  public boolean getRemission(){ return this.remission; }
+  public double getRemDuration(){ return this.remDuration; }
+  public double getMonthsToLive(){ return this.monthsToLive; }
+  public HashMap<String, Double> getHashMap() { return this.data; }
+  public String getInfection() { return this.infection; }
 }
 
 class Solution
 {
-  
-  
   public static void main (String[] args) throws Exception
   {
     ArrayList<Patient> patientList = new ArrayList<Patient>();
@@ -78,7 +49,7 @@ class Solution
     System.out.println(hi.size());
   }
   
-  private static ArrayList<Patient> importPatientInfo(String patientFilePath)
+   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
     ArrayList<Patient> patient = new ArrayList<Patient>();
     try
@@ -98,9 +69,6 @@ class Solution
         counter++;
       }  
       currentLine = reader.readLine();
-      currentLine = currentLine.toLowerCase();
-      parts = currentLine.split("\t");
-      
       
       while(currentLine!= null)
       {
@@ -108,7 +76,7 @@ class Solution
         parts = currentLine.split("\t");
         
         
-        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};
+        int [] nonNumIndex = {1,4,5,6,7,8,9,10};
         
         // changes all nonnumerical attributes
         for (int m = 0; m < nonNumIndex.length; m++)
@@ -126,31 +94,18 @@ class Solution
             parts[i] = "1";
           }
           
-          if (parts[i].equals("flu-hdac"))
-          {
-            parts[i] = "2";
-          }
-          
-          if (parts[i].equals("hdac-plus"))
-          {
-            parts[i] = "3";
-          }
-          
-          if (parts[i].equals("stdarac-plus"))
-          {
-            parts[i] = "4";
-          }
-          
           if (parts[i].equals("na") || parts[i].equals("notdone") || parts[i].equals("nd"))
           {
             parts[i] = "8008135"; //arbitrary number to avoid NullPointer error - will be dealt with later
           }
         }
+        
         HashMap<String, Double> aData = new HashMap<String, Double>();
         String aID;
         boolean aRemission;
         double aDuration;
         double aMonths;
+        String infection = parts[11];
         aID = parts[0];
         if(parts[266].equals("complete_remission"))
         {
@@ -170,10 +125,14 @@ class Solution
         int counter2 = 0;
         for (int i=1; i<266; i++)
         {
-          // System.out.println(parts[i]);
-          if(parts[i].equals("na"))
+          if (i == 11)
           {
-            Double value = Double.parseDouble("8008135");
+            i++;
+          }
+          // System.out.println(parts[i]);
+          else if(parts[i].equals("na"))
+          {
+            Double value = Double.parseDouble("8008135"); //arbitrary number to avoid NullPointer error - will be dealt with later
           }
           else
           {
@@ -184,7 +143,7 @@ class Solution
           }
         }
         
-        Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
+        Patient newPatient = new Patient (aID, infection, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
         patient.add(newPatient);
         currentLine = reader.readLine();
         
@@ -283,11 +242,13 @@ class Solution
   public static ArrayList<Token> correlatedKeys(ArrayList<Patient> patients) //returns list from least to greatest correlation to REM
   {
     ArrayList<Token> stdDev = new ArrayList<Token>();
-    int hashLength = patients.get(0).getHashMap().size(); 
     ArrayList<String> keySet = new ArrayList<String>();
+    
+    System.out.println(patients.get(0).getHashMap().size());
     Set<String> keys = patients.get(0).getHashMap().keySet();
     keySet.addAll(keys);
-    for(int j = 0; j<hashLength; j++)
+    System.out.println(keySet);
+    for(int j = 0; j<266; j++)
     {
       int counter = 0;
       double arr[] = new double [patients.size()];
@@ -296,7 +257,7 @@ class Solution
         arr[i] = patients.get(i).getHashMap().get(keySet.get(counter));
         counter ++;
       }
-      Token t = new Token(standardDeviation(arr), keySet.get(counter));
+      Token t = new Token(StatCalcs.standardDeviation(arr), keySet.get(counter));
       stdDev.add(t);
     }
     ArrayList<Token> result = new ArrayList<Token>();
@@ -350,28 +311,9 @@ class Solution
     return newArrayList;
   }
   
-  public static double standardDeviation(double[] array){
-    double average = calculateMean(array);
-    double variance = 0;
-    for(int i=0; i<array.length; i++){
-      variance += ((array[i] - average)*(array[i] - average))/array.length;
-    }
-    double sD = Math.sqrt(variance);
-    return sD;
-  }
-  public static double calculateMean(double[] array){
-    double sum = 0;
-    for(int i=0; i<array.length; i++){
-      sum += array[i];
-    }
-    double average = sum/array.length;
-    return average;
-    
-  }
-  
 }
 
-class statCalcs
+class StatCalcs
 {
   public static double calculateMean(double[] array){
     double sum = 0;
