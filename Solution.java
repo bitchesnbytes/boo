@@ -7,17 +7,30 @@ public class Patient
   private double RemDuration;
   private double monthsToLive; 
   
-  public Patient getRemission(){
+  public boolean getRemission(){
     return this.Remission;
   }
   
-  public Patient getRemDuration(){
+  public void setRemission(boolean remission){
+    this.remission = remission;
+  }
+  
+  public double getRemDuration(){
     return this.remDuration;
   }
   
-  public Patient getMonthsToLive(){
+  public void setRemDuration(double remDuration){
+    this.remDuration = remDuration;
+  }
+  
+  public double getMonthsToLive(){
     return this.monthsToLive;
   }
+  
+  public void setMonthsToLive(double monthsToLive){
+    this.monthsToLive = monthsToLive;
+  }
+  
 }
 
 public class Solution
