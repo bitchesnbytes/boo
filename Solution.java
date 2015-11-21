@@ -57,6 +57,34 @@ class Patient
     return this.data;
   }
   
+  public static double calculateMedian(double[] array){
+    Arrays.sort(array);
+    double median=0;
+    if(array.length%2 == 0){
+      median = ((double)array[array.length/2] + (double)array[array.length/2-1]);
+    }
+    else{
+      median = (double)array[array.length/2];
+    }
+    return median;
+  }
+  
+  public static double standardDeviation(double[] array){
+    double average = calculateMean(array);
+    double variance = 0;
+    for(int i=0; i<array.length; i++){
+      variance += ((array[i] - average)*(array[i] - average))/array.length;
+    }
+    double sD = Math.sqrt(variance);
+    return sD;
+  }
+  
+  public static void main(String[] args){
+    double[] dataArray = {0.766664555, 0.05794828, -0.54771709, -0.186953581, -1.245286441, 1.656512197, -0.95164766, 0.068809303};
+    System.out.println(calculateMean(dataArray));
+    System.out.println(standardDeviation(dataArray));
+  }
+  
 }
 
 public class Solution
