@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Patient
+class Patient
 {
   private String patientId; 
   private boolean Remission;
@@ -53,12 +53,23 @@ public class Patient
 
 public class Solution
 {
+  
+  public static void main (String[] args)
+  {
+    ArrayList<Patient> butthole = new ArrayList<Patient>();
+    butthole = importPatientInfo("trainingData.txt");
+    for(int i = 0; i<butthole.size(); i++)
+    {
+      System.out.println(butthole.get(i).getPatientId());
+    }
+  }
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
     ArrayList<Patient> patient = new ArrayList<Patient>();
     try
     {
       BufferedReader reader = new BufferedReader (new FileReader(patientFilePath));
+      
       String currentLine = reader.readLine();
       currentLine = currentLine.toLowerCase();
       currentLine = reader.readLine();
@@ -74,6 +85,46 @@ public class Solution
       currentLine = reader.readLine();
       currentLine = currentLine.toLowerCase();
       parts = currentLine.split("\t");
+      
+      
+      
+      int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};
+      
+      for (int m = 1; m < nonNumIndex.length; m++)
+      {
+        int i = nonNumIndex[m];
+        
+        if (parts[i] == "no" || parts[i] == "m" || parts[i] == "neg" || parts[i] == "anthra-hdac")
+        {
+          parts[i] = "0";
+        }
+        
+        if (parts[i] == "yes" || parts[i] == "f" || parts[i] == "pos" || parts[i] == "anthra-plus")
+        {
+          parts[i] = "1";
+        }
+        
+        if (parts[i] == "flu-hdac")
+        {
+          parts[i] = "2";
+        }
+        
+        if (parts[i] == "hdac-plus")
+        {
+          parts[i] = "3";
+        }
+        
+        if (parts[i] == "stdaracplus")
+        {
+          parts[i] = "4";
+        }
+        
+        
+        if (parts[i] == "na" || parts[i] == "notdone")
+        {
+          parts[i] = "44";
+        }
+      }
       while(currentLine!= null)
       {
         HashMap<String, Float> aData = new HashMap<String, Float>();
@@ -82,7 +133,7 @@ public class Solution
         double aDuration;
         double aMonths;
         aID = parts[0];
-        if(parts[266].equals("COMPLETE_REMISSION"))
+        if(parts[266].equals("complete_remission"))
          {
            aRemission = true;
          }
