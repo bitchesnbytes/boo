@@ -6,6 +6,7 @@ public class Patient
   private boolean Remission;
   private double RemDuration;
   private double monthsToLive; 
+  HashMap<String[], Float[]> data = new HashMap<String[], Float[]>();
   
   public boolean getRemission(){
     return this.Remission;
