@@ -7,14 +7,16 @@ class Patient
   private String patientId; 
   private boolean remission;
   private double remDuration;
-  private double monthsToLive; 
+  private double monthsToLive;
+  private String infection;
   HashMap<String, Double> data = new HashMap<String, Double>();
   
   
   // Constructor that takes all Patient attributes as input
-  public Patient(String patientId, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
+  public Patient(String patientId, String infection, boolean Remission, double RemDuration, double monthsToLive, HashMap<String, Double> data){
     this.patientId = patientId;
     this.remission = remission;
+    this.infection = infection;
     this.remDuration = remDuration;
     this.monthsToLive = monthsToLive;
     this.data = data;
@@ -56,6 +58,9 @@ class Patient
     return this.data;
   }
   
+  public String getInfection()
+  { return this.infection; }
+  
 }
 
 public class Solution
@@ -68,9 +73,8 @@ public class Solution
     patientList = importPatientInfo("trainingData.txt");
     for(int i = 0; i<patientList.size(); i++)
     {
-      System.out.println(patientList.get(i).getPatientId());
+      System.out.println(patientList.get(i).getInfection());
     }
-    
     
   }
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
@@ -103,7 +107,7 @@ public class Solution
         parts = currentLine.split("\t");
         
         
-        int [] nonNumIndex = {1,4,5,6,7,8,9,10,11};
+        int [] nonNumIndex = {1,4,5,6,7,8,9,10};
         
         // changes all nonnumerical attributes
         for (int m = 0; m < nonNumIndex.length; m++)
@@ -121,31 +125,18 @@ public class Solution
             parts[i] = "1";
           }
           
-          if (parts[i].equals("flu-hdac"))
-          {
-            parts[i] = "2";
-          }
-          
-          if (parts[i].equals("hdac-plus"))
-          {
-            parts[i] = "3";
-          }
-          
-          if (parts[i].equals("stdarac-plus"))
-          {
-            parts[i] = "4";
-          }
-          
           if (parts[i].equals("na") || parts[i].equals("notdone") || parts[i].equals("nd"))
           {
             parts[i] = "8008135"; //arbitrary number to avoid NullPointer error - will be dealt with later
           }
         }
+        
         HashMap<String, Double> aData = new HashMap<String, Double>();
         String aID;
         boolean aRemission;
         double aDuration;
         double aMonths;
+        String infection = parts[11];
         aID = parts[0];
         if(parts[266].equals("complete_remission"))
         {
@@ -165,10 +156,14 @@ public class Solution
         int counter2 = 0;
         for (int i=1; i<266; i++)
         {
-          // System.out.println(parts[i]);
-          if(parts[i].equals("na"))
+          if (i == 11)
           {
-            Double value = Double.parseDouble("8008135");
+            i++;
+          }
+          // System.out.println(parts[i]);
+          else if(parts[i].equals("na"))
+          {
+            Double value = Double.parseDouble("8008135"); //arbitrary number to avoid NullPointer error - will be dealt with later
           }
           else
           {
@@ -179,7 +174,7 @@ public class Solution
           }
         }
         
-        Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
+        Patient newPatient = new Patient (aID, infection, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
         patient.add(newPatient);
         currentLine = reader.readLine();
         
@@ -257,13 +252,5 @@ class statCalcs
     double sD = Math.sqrt(variance);
     return sD;
   }
-  
-  public static double normalize(double mean, double standardDeviation, double dataPoint){
-    double normalizeData = (dataPoint - mean)/standardDeviation;
-    return normalizeData;
-  }
-  
-  public static double computeDistance(){
-    
-  }
 }
+
