@@ -52,7 +52,7 @@ class Patient
     this.monthsToLive = monthsToLive;
   }
   
-  public HashMap<String, Float> getHashMap(){
+  public HashMap<String, Double> getHashMap(){
     return this.data;
   }
   
