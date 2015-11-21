@@ -6,6 +6,7 @@ public class Patient
   private boolean Remission;
   private double RemDuration;
   private double monthsToLive; 
+  HashMap<String[], Float[]> geneticInfo = new HashMap<String[], Float[]>();
   
   public Patient getRemission(){
     return this.Remission;
