@@ -66,18 +66,18 @@ class Solution
     ArrayList<Patient> patientList = new ArrayList<Patient>();
     patientList = importPatientInfo("trainingData.txt");
     /*for(int i = 0; i<patientList.size(); i++)
-    {
-      //System.out.println(patientList.get(i).getPatientId());
-    }*/
+     {
+     //System.out.println(patientList.get(i).getPatientId());
+     }*/
     ArrayList<Token> hi = new ArrayList<Token>();
     hi = correlatedKeys(patientList);
     /*for (Token t: hi)
-    {
-      System.out.println(t.getKey() + " " + t.getsd());
-    }*/
+     {
+     System.out.println(t.getKey() + " " + t.getsd());
+     }*/
     System.out.println(hi.size());
   }
-       
+  
   private static ArrayList<Patient> importPatientInfo(String patientFilePath)
   {
     ArrayList<Patient> patient = new ArrayList<Patient>();
@@ -227,8 +227,60 @@ class Solution
     }
     return resPatients;
   }
-  
-    public static ArrayList<Token> correlatedKeys(ArrayList<Patient> patients) //returns list from least to greatest correlation to REM
+  public static boolean predictRemStatus(HashMap<String, Double> unknownStatus, ArrayList<Token> rem, ArrayList<Token> res)
+  {
+    int trueCounter = 0;
+    int falseCounter = 0;
+    
+    //Create ArrayList of relevant keys, HashMaps mapping relevant keys to their mean/SD values
+    ArrayList<String> relRemKeys = new ArrayList<String>();
+    HashMap<String,Double[]> relRem = new HashMap<String,Double[]>();
+    
+    for (int i = 0; i < rem.size(); i++)
+    {
+      relRemKeys.add(rem.get(i).getKey());
+      Double [] meanSD = {(rem.get(i).getMean()), (rem.get(i).getsd())};
+      relRem.put(rem.get(i).getKey(), meanSD);
+    }
+    
+    ArrayList<String> relResKeys = new ArrayList<String>();
+    HashMap<String,Double[]> relRes = new HashMap<String,Double[]>();
+    
+    for (int i = 0; i < res.size(); i++)
+    {
+      relResKeys.add(res.get(i).getKey());
+      Double [] meanSD = {(res.get(i).getMean()), (res.get(i).getsd())};
+      relRes.put(res.get(i).getKey(), meanSD);
+    }
+    
+    // Loop through relevant keys in remission and resistant cases.
+    // Checks if unknown value for a relevant key is in range (mean ± standard deviation)
+    // Adds to relevant counter depending on whether key is or isn't in range
+    
+    for (int i = 0; i < relRem.size(); i++)
+    {
+      if (((unknownStatus.get(relRemKeys.get(i))) <= (relRem.get(relRemKeys.get(i))[0] + relRem.get(relRemKeys.get(i))[1])) || 
+          ((unknownStatus.get(relRemKeys.get(i))) >= (relRem.get(relRemKeys.get(i))[0] - relRem.get(relRemKeys.get(i))[1])))
+      {trueCounter++;}
+      else
+      {falseCounter++;}
+    }
+    
+    for (int i = 0; i < relRes.size(); i++)
+    {
+      if (((unknownStatus.get(relResKeys.get(i))) <= (relRes.get(relResKeys.get(i))[0] + relRes.get(relResKeys.get(i))[1])) || 
+          ((unknownStatus.get(relResKeys.get(i))) >= (relRes.get(relResKeys.get(i))[0] - relRes.get(relResKeys.get(i))[1])))
+      { falseCounter++; }
+      else
+      { trueCounter++; }
+    }
+    
+    // returns true if there are more remission indicators than resistance indicators, false otherwise
+    if (trueCounter > falseCounter)
+    { return true; }
+    return false;
+  }
+  public static ArrayList<Token> correlatedKeys(ArrayList<Patient> patients) //returns list from least to greatest correlation to REM
   {
     ArrayList<Token> stdDev = new ArrayList<Token>();
     int hashLength = patients.get(0).getHashMap().size(); 
@@ -244,60 +296,60 @@ class Solution
         arr[i] = patients.get(i).getHashMap().get(keySet.get(counter));
         counter ++;
       }
-        Token t = new Token(standardDeviation(arr), keySet.get(counter));
-        stdDev.add(t);
+      Token t = new Token(standardDeviation(arr), keySet.get(counter));
+      stdDev.add(t);
     }
     ArrayList<Token> result = new ArrayList<Token>();
     result = mergeSort(result);
     return result;
   }
   public static ArrayList<Token> mergeSort(ArrayList<Token> tok)
- {
-   int middle = tok.size()/2;
-   ArrayList<Token> left = new ArrayList<Token>();
-   ArrayList<Token> right = new ArrayList<Token>(); 
-   if(tok.size() <= 1)
-   {
-     return tok;
-   }
-   for(int i = 0; i<middle; i++)
-   {
-     left.add(i, tok.get(i));
-   }
-   for(int j = middle; j<=tok.size(); j++)
-   {
-     right.add(j, tok.get(j));
-   }
-   left = mergeSort(left);
-   right = mergeSort(right);
-   ArrayList<Token> result = merge(left, right);
-   return result;
- }
-   public static ArrayList<Token> merge(ArrayList<Token> left, ArrayList<Token> right)
- {
-   int length = left.size() + right.size();
-   ArrayList<Token> newArrayList = new ArrayList<Token>();
-   
-   int a = 0;
-   int b = 0;
-   for(int i = 0; i<newArrayList.size(); i++)
-   {
-     double d = left.get(a).getsd();
-     double d2 = right.get(b).getsd();
-     if((b>=right.size() || a<left.size() && d<d2))
-     {
-       newArrayList.add(i, left.get(a));
-       a++;
-     }
-     else
-     {
-       newArrayList.add(i, right.get(b));
-       b++;
-     }
-   }
-  return newArrayList;
- }
-     
+  {
+    int middle = tok.size()/2;
+    ArrayList<Token> left = new ArrayList<Token>();
+    ArrayList<Token> right = new ArrayList<Token>(); 
+    if(tok.size() <= 1)
+    {
+      return tok;
+    }
+    for(int i = 0; i<middle; i++)
+    {
+      left.add(i, tok.get(i));
+    }
+    for(int j = middle; j<=tok.size(); j++)
+    {
+      right.add(j, tok.get(j));
+    }
+    left = mergeSort(left);
+    right = mergeSort(right);
+    ArrayList<Token> result = merge(left, right);
+    return result;
+  }
+  public static ArrayList<Token> merge(ArrayList<Token> left, ArrayList<Token> right)
+  {
+    int length = left.size() + right.size();
+    ArrayList<Token> newArrayList = new ArrayList<Token>();
+    
+    int a = 0;
+    int b = 0;
+    for(int i = 0; i<newArrayList.size(); i++)
+    {
+      double d = left.get(a).getsd();
+      double d2 = right.get(b).getsd();
+      if((b>=right.size() || a<left.size() && d<d2))
+      {
+        newArrayList.add(i, left.get(a));
+        a++;
+      }
+      else
+      {
+        newArrayList.add(i, right.get(b));
+        b++;
+      }
+    }
+    return newArrayList;
+  }
+  
   public static double standardDeviation(double[] array){
     double average = calculateMean(array);
     double variance = 0;
@@ -307,15 +359,15 @@ class Solution
     double sD = Math.sqrt(variance);
     return sD;
   }
-    public static double calculateMean(double[] array){
+  public static double calculateMean(double[] array){
     double sum = 0;
     for(int i=0; i<array.length; i++){
       sum += array[i];
     }
     double average = sum/array.length;
     return average;
-  
-}
+    
+  }
   
 }
 
@@ -352,30 +404,32 @@ class statCalcs
     return sD;
   }
 }
-  class Token
+class Token
+{
+  private String key;
+  private double sd;
+  private double mean; 
+  
+  public Token  (double aSd, String aKey)
   {
-    private String key;
-    private double sd;
-    private double mean; 
-    
-    public Token  (double aSd, String aKey)
-    {
-      this.sd = aSd;
-      this.key = key;
-    }
-    public String getKey()
-    {
-      return this.key;
-    }
-    public double getsd()
-    {
-      return this.sd;
-    }
-    public void setMean(double m)
-    {
-      this.mean = m;
-    }
-  }         
-
-
-      
+    this.sd = aSd;
+    this.key = key;
+  }
+  public String getKey()
+  {
+    return this.key;
+  }
+  public double getsd()
+  {
+    return this.sd;
+  }
+  public void setMean(double m)
+  {
+    this.mean = m;
+  }
+  
+  public double getMean()
+  {
+    return this.mean;
+  }
+}         
