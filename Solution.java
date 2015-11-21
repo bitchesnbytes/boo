@@ -4,7 +4,8 @@ import java.io.*;
 public class Patient
 {
   private boolean Remission;
-  private int RemDuration;
+  private double RemDuration;
+  private double monthsToLive; 
   
 }
 
