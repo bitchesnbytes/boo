@@ -52,43 +52,15 @@ class Patient
     this.monthsToLive = monthsToLive;
   }
   
-  public HashMap<String, Float> getHashMap()
-  {
+  public HashMap<String, Float> getHashMap(){
     return this.data;
-  }
-  
-  public static double calculateMedian(double[] array){
-    Arrays.sort(array);
-    double median=0;
-    if(array.length%2 == 0){
-      median = ((double)array[array.length/2] + (double)array[array.length/2-1]);
-    }
-    else{
-      median = (double)array[array.length/2];
-    }
-    return median;
-  }
-  
-  public static double standardDeviation(double[] array){
-    double average = calculateMean(array);
-    double variance = 0;
-    for(int i=0; i<array.length; i++){
-      variance += ((array[i] - average)*(array[i] - average))/array.length;
-    }
-    double sD = Math.sqrt(variance);
-    return sD;
-  }
-  
-  public static void main(String[] args){
-    double[] dataArray = {0.766664555, 0.05794828, -0.54771709, -0.186953581, -1.245286441, 1.656512197, -0.95164766, 0.068809303};
-    System.out.println(calculateMean(dataArray));
-    System.out.println(standardDeviation(dataArray));
   }
   
 }
 
 public class Solution
 {
+  
   
   public static void main (String[] args) throws Exception
   {
@@ -116,7 +88,7 @@ public class Solution
       int counter = 0;
       for (int i = 1; i < 266; i++) //go through first block to get all keys into keys array 
       {
-       // System.out.println(parts[i]);
+        // System.out.println(parts[i]);
         keys[counter] = parts[i];
         counter++;
       }  
@@ -124,7 +96,7 @@ public class Solution
       currentLine = currentLine.toLowerCase();
       parts = currentLine.split("\t");
       
-
+      
       while(currentLine!= null)
       {
         currentLine = currentLine.toLowerCase();
@@ -176,49 +148,81 @@ public class Solution
         double aMonths;
         aID = parts[0];
         if(parts[266].equals("complete_remission"))
-         {
-           aRemission = true;
-         }
-         else
-         {
-           aRemission = false;
-         }
-         if (!(parts[267].equals("na")))
-         {
-           aDuration =Double.parseDouble(parts[267]);
-         }
-         else{ aDuration = 0; }
-         
-         aMonths = Double.parseDouble(parts[268]);
-         int counter2 = 0;
+        {
+          aRemission = true;
+        }
+        else
+        {
+          aRemission = false;
+        }
+        if (!(parts[267].equals("na")))
+        {
+          aDuration =Double.parseDouble(parts[267]);
+        }
+        else{ aDuration = 0; }
+        
+        aMonths = Double.parseDouble(parts[268]);
+        int counter2 = 0;
         for (int i=1; i<266; i++)
         {
-         // System.out.println(parts[i]);
+          // System.out.println(parts[i]);
           if(parts[i].equals("na"))
           {
             Double value = Double.parseDouble("8008135");
           }
           else
           {
-          Double value = Double.parseDouble(parts[i]);
-          
+            Double value = Double.parseDouble(parts[i]);
+            
 //          System.out.println(value);
-          aData.put(keys[counter2], value);
+            aData.put(keys[counter2], value);
           }
         }
         
         Patient newPatient = new Patient (aID, aRemission, aDuration, aMonths, aData); //create a new patient object for each line of code
         patient.add(newPatient);
         currentLine = reader.readLine();
-
+        
       }
       reader.close();
     }
-      catch (IOException x)
-  {
-    System.out.println(x);
+    catch (IOException x)
+    {
+      System.out.println(x);
+    }
+    //returns array list
+    return patient;
   }
-  //returns array list
-  return patient;
- }
+  
+  public static double calculateMean(double[] array){
+    double sum = 0;
+    for(int i=0; i<array.length; i++){
+      sum += array[i];
+    }
+    double average = sum/array.length;
+    return average;
+  }
+  
+  public static double calculateMedian(double[] array){
+    Arrays.sort(array);
+    double median=0;
+    if(array.length%2 == 0){
+      median = ((double)array[array.length/2] + (double)array[array.length/2-1]);
+    }
+    else{
+      median = (double)array[array.length/2];
+    }
+    return median;
+  }
+  
+  public static double standardDeviation(double[] array){
+    double average = calculateMean(array);
+    double variance = 0;
+    for(int i=0; i<array.length; i++){
+      variance += ((array[i] - average)*(array[i] - average))/array.length;
+    }
+    double sD = Math.sqrt(variance);
+    return sD;
+  }
+    
 }
