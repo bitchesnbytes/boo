@@ -257,4 +257,13 @@ class statCalcs
     double sD = Math.sqrt(variance);
     return sD;
   }
+  
+  public static double normalize(double mean, double standardDeviation, double dataPoint){
+    double normalizeData = (dataPoint - mean)/standardDeviation;
+    return normalizeData;
+  }
+  
+  public static double computeDistance(){
+    
+  }
 }
