@@ -64,9 +64,6 @@ public class Solution
         counter++;
       }  
       currentLine = reader.readLine();
-      currentLine = currentLine.toLowerCase();
-      parts = currentLine.split("\t");
-      
       
       while(currentLine!= null)
       {
